@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Presenze">
+<title>Presenze Squadriglia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f1ea;
+    --card: #ffffff;
+    --text: #22312a;
+    --muted: #68766f;
+    --accent: #2f6f4f;
+    --accent-dark: #204d37;
+    --border: #e1ded2;
+    --danger: #b3432f;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161b18; --card: #1f2621; --text: #eef1ee; --muted: #9aa69f;
+      --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161b18; --card: #1f2621; --text: #eef1ee; --muted: #9aa69f;
+    --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: 'Fredoka', system-ui, -apple-system, sans-serif;
+    display: flex; justify-content: center;
+  }
+  #app { width: 100%; max-width: 440px; padding: 20px 16px 40px; }
+  h1 { font-size: 1.3rem; margin: 4px 0 2px; }
+  .sub { color: var(--muted); font-size: 0.9rem; margin: 0 0 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px; margin-bottom: 14px;
+  }
+  label { display: block; font-size: 0.85rem; color: var(--muted); margin: 10px 0 5px; }
+  input[type=text] {
+    width: 100%; padding: 11px 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    font-family: inherit; font-size: 1rem;
+  }
+  input[type=text]:focus { outline: 2px solid var(--accent); }
+  button {
+    font-family: inherit; font-weight: 600; border: none; border-radius: 10px;
+    padding: 11px 16px; font-size: 0.95rem; cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); color: #fff; width: 100%; margin-top: 12px; }
+  .btn-primary:active { background: var(--accent-dark); }
+  .btn-secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
+  .btn-text { background: none; color: var(--muted); padding: 4px 8px; font-size: 0.85rem; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row button { flex: 1; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .nav .who { font-size: 0.85rem; color: var(--muted); }
+  .nav .who b { color: var(--text); }
+  .hidden { display: none !important; }
+  .member-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 2px; border-bottom: 1px solid var(--border);
+  }
+  .member-row:last-child { border-bottom: none; }
+  .member-row .x { color: var(--danger); cursor: pointer; font-size: 0.85rem; background: none; border: none; padding: 4px 8px; }
+  .empty { color: var(--muted); font-size: 0.9rem; padding: 10px 2px; }
+  .check-row { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--border); }
+  .check-row:last-child { border-bottom: none; }
+  .check-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
+  .check-row label { margin: 0; color: var(--text); font-size: 1rem; }
+  textarea {
+    width: 100%; min-height: 120px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 10px; resize: vertical;
+  }
+  .toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%);
+    background: var(--accent-dark); color: #fff; padding: 9px 16px; border-radius: 20px; font-size: 0.85rem; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- LOGIN -->
+  <div id="view-login">
+    <h1>🏕️ Presenze Squadriglia</h1>
+    <p class="sub">Accedi con il tuo nome e il nome della tua squadriglia.</p>
+    <div class="card">
+      <label for="in-nome">Il tuo nome</label>
+      <input type="text" id="in-nome" placeholder="es. Marco">
+      <label for="in-squadriglia">Nome squadriglia</label>
+      <input type="text" id="in-squadriglia" placeholder="es. Aquile">
+      <button class="btn-primary" onclick="login()">Entra</button>
+    </div>
+  </div>
+
+  <!-- ROSTER -->
+  <div id="view-roster" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-1"></b><br>Ciao, <b id="user-nome-1"></b></div>
+      <button class="btn-text" onclick="logout()">Esci</button>
+    </div>
+    <div class="card">
+      <label for="in-membro">Aggiungi persona alla squadriglia</label>
+      <input type="text" id="in-membro" placeholder="Nome persona" onkeydown="if(event.key==='Enter')addMember()">
+      <button class="btn-primary" onclick="addMember()">+ Aggiungi</button>
+    </div>
+    <div class="card">
+      <div id="roster-list"></div>
+    </div>
+    <button class="btn-primary" onclick="goToPresenze()">📋 Stampa Presenze</button>
+  </div>
+
+  <!-- PRESENZE (checklist) -->
+  <div id="view-presenze" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-2"></b></div>
+      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+    </div>
+    <h1>Segna chi è presente</h1>
+    <div class="card">
+      <div id="presenze-list"></div>
+    </div>
+    <button class="btn-primary" onclick="generaOutput()">Genera elenco presenti</button>
+  </div>
+
+  <!-- OUTPUT -->
+  <div id="view-output" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-3"></b></div>
+      <button class="btn-text" onclick="goToPresenze()">← Modifica</button>
+    </div>
+    <h1>Elenco presenti</h1>
+    <div class="card">
+      <textarea id="output-text" readonly></textarea>
+      <button class="btn-primary" onclick="copyOutput()">📋 Copia testo</button>
+      <button class="btn-secondary" onclick="goToRoster()">Torna alla lista</button>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let session = null; // { nome, squadriglia }
+let roster = [];    // array di stringhe
+let presentiState = {}; // nome -> bool, per la sessione corrente di presenze
+
+function showView(id) {
+  ['view-login','view-roster','view-presenze','view-output'].forEach(v => {
+    document.getElementById(v).classList.toggle('hidden', v !== id);
+  });
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+
+function rosterKey(squadriglia) {
+  return 'presenze_roster_' + squadriglia.trim().toLowerCase();
+}
+
+function loadRoster() {
+  try {
+    const raw = localStorage.getItem(rosterKey(session.squadriglia));
+    roster = raw ? JSON.parse(raw) : [];
+  } catch (e) { roster = []; }
+}
+
+function saveRoster() {
+  try {
+    localStorage.setItem(rosterKey(session.squadriglia), JSON.stringify(roster));
+  } catch (e) { console.error('Errore salvataggio:', e); }
+}
+
+function login() {
+  const nome = document.getElementById('in-nome').value.trim();
+  const squadriglia = document.getElementById('in-squadriglia').value.trim();
+  if (!nome || !squadriglia) { toast('Inserisci nome e squadriglia'); return; }
+  session = { nome, squadriglia };
+  try { localStorage.setItem('presenze_session', JSON.stringify(session)); } catch (e) {}
+  loadRoster();
+  goToRoster();
+}
+
+function logout() {
+  session = null;
+  try { localStorage.removeItem('presenze_session'); } catch (e) {}
+  document.getElementById('in-nome').value = '';
+  document.getElementById('in-squadriglia').value = '';
+  showView('view-login');
+}
+
+function goToRoster() {
+  document.getElementById('sq-nome-1').textContent = session.squadriglia;
+  document.getElementById('user-nome-1').textContent = session.nome;
+  renderRoster();
+  showView('view-roster');
+}
+
+function renderRoster() {
+  const list = document.getElementById('roster-list');
+  list.innerHTML = '';
+  if (roster.length === 0) {
+    list.innerHTML = '<div class="empty">Nessuna persona ancora. Aggiungine una qui sopra.</div>';
+    return;
+  }
+  roster.forEach((nome, i) => {
+    const row = document.createElement('div');
+    row.className = 'member-row';
+    row.innerHTML = `<span>${escapeHtml(nome)}</span><button class="x" onclick="removeMember(${i})">rimuovi</button>`;
+    list.appendChild(row);
+  });
+}
+
+function addMember() {
+  const input = document.getElementById('in-membro');
+  const nome = input.value.trim();
+  if (!nome) return;
+  roster.push(nome);
+  saveRoster();
+  input.value = '';
+  renderRoster();
+}
+
+function removeMember(i) {
+  roster.splice(i, 1);
+  saveRoster();
+  renderRoster();
+}
+
+function goToPresenze() {
+  if (roster.length === 0) { toast('Aggiungi prima qualche persona'); return; }
+  document.getElementById('sq-nome-2').textContent = session.squadriglia;
+  const list = document.getElementById('presenze-list');
+  list.innerHTML = '';
+  roster.forEach((nome, i) => {
+    const id = 'chk-' + i;
+    const checked = presentiState[nome] ? 'checked' : '';
+    const row = document.createElement('div');
+    row.className = 'check-row';
+    row.innerHTML = `<input type="checkbox" id="${id}" data-nome="${escapeHtml(nome)}" ${checked}><label for="${id}">${escapeHtml(nome)}</label>`;
+    list.appendChild(row);
+  });
+  showView('view-presenze');
+}
+
+function generaOutput() {
+  const checks = document.querySelectorAll('#presenze-list input[type=checkbox]');
+  presentiState = {};
+  const presenti = [];
+  checks.forEach(c => {
+    presentiState[c.dataset.nome] = c.checked;
+    if (c.checked) presenti.push(c.dataset.nome);
+  });
+  document.getElementById('sq-nome-3').textContent = session.squadriglia;
+  const testo = presenti.length
+    ? `Presenze squadriglia ${session.squadriglia}:\n` + presenti.join('\n')
+    : `Nessuna persona segnata come presente (squadriglia ${session.squadriglia}).`;
+  document.getElementById('output-text').value = testo;
+  showView('view-output');
+}
+
+async function copyOutput() {
+  const ta = document.getElementById('output-text');
+  try {
+    await navigator.clipboard.writeText(ta.value);
+    toast('Copiato negli appunti!');
+  } catch (e) {
+    ta.select();
+    toast('Seleziona e copia manualmente');
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Ripristina sessione se presente
+(function init() {
+  try {
+    const raw = localStorage.getItem('presenze_session');
+    if (raw) {
+      session = JSON.parse(raw);
+      loadRoster();
+      goToRoster();
+      return;
+    }
+  } catch (e) {}
+  showView('view-login');
+})();
+</script>
+</body>
+</html>
