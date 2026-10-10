@@ -96,9 +96,9 @@
     <p class="sub">Accedi con il tuo nome e il nome della tua squadriglia.</p>
     <div class="card">
       <label for="in-nome">Il tuo nome</label>
-      <input type="text" id="in-nome" placeholder="es. Marco">
+      <input type="text" id="in-nome" placeholder="es. Max">
       <label for="in-squadriglia">Nome squadriglia</label>
-      <input type="text" id="in-squadriglia" placeholder="es. Aquile">
+      <input type="text" id="in-squadriglia" placeholder="es. Squali">
       <button class="btn-primary" onclick="login()">Entra</button>
     </div>
   </div>
@@ -117,7 +117,7 @@
     <div class="card"><div id="roster-list"></div></div>
     <div class="btn-row">
       <button class="btn-primary" onclick="goToPresenze()">📋 Presenze</button>
-      <button class="btn-secondary" onclick="goToStorico()">🗓️ Storico</button>
+      <button class="btn-secondary" onclick="goToStorico()">🗓️ Agenda</button>
     </div>
   </div>
 
@@ -145,7 +145,7 @@
     <h1>Elenco presenze</h1>
     <div class="card">
       <textarea id="output-text" readonly></textarea>
-      <button class="btn-primary" onclick="copyOutput()">📋 Copia testo</button>
+      <button class="btn-primary" onclick="copyOutput()">Copia testo</button>
       <button class="btn-secondary" onclick="goToRoster()">Torna alla lista</button>
     </div>
   </div>
@@ -156,7 +156,7 @@
       <div class="who">Squadriglia <b id="sq-nome-4"></b></div>
       <button class="btn-text" onclick="goToRoster()">← Lista</button>
     </div>
-    <h1>Storico riunioni</h1>
+    <h1>lista riunioni</h1>
     <div class="card"><div id="storico-list"></div></div>
   </div>
 
@@ -172,8 +172,8 @@ let accounts = [];
 const STATI = {
   assente: 'Assente',
   presente: 'Presente',
-  uscito_prima: 'Uscito prima',
-  arrivato_dopo: 'Arrivato dopo'
+  uscito_prima: 'Esce prima',
+  arrivato_dopo: 'Arriva dopo'
 };
 
 function showView(id) {
