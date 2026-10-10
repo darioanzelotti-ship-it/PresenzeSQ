@@ -77,6 +77,8 @@
   .storico-item .d { font-weight: 600; text-transform: capitalize; }
   .storico-item .s { color: var(--muted); font-size: 0.82rem; }
   .storico-item .del { color: var(--danger); background: none; border: none; font-size: 0.8rem; padding: 6px; }
+  .calendar-frame { width: 100%; height: 65vh; min-height: 420px; border: none; border-radius: 14px; background: var(--card); }
+  .cal-note { color: var(--muted); font-size: 0.8rem; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -96,9 +98,9 @@
     <p class="sub">Accedi con il tuo nome e il nome della tua squadriglia.</p>
     <div class="card">
       <label for="in-nome">Il tuo nome</label>
-      <input type="text" id="in-nome" placeholder="es. Max">
+      <input type="text" id="in-nome" placeholder="es. Marco">
       <label for="in-squadriglia">Nome squadriglia</label>
-      <input type="text" id="in-squadriglia" placeholder="es. Squali">
+      <input type="text" id="in-squadriglia" placeholder="es. Aquile">
       <button class="btn-primary" onclick="login()">Entra</button>
     </div>
   </div>
@@ -117,8 +119,9 @@
     <div class="card"><div id="roster-list"></div></div>
     <div class="btn-row">
       <button class="btn-primary" onclick="goToPresenze()">📋 Presenze</button>
-      <button class="btn-secondary" onclick="goToStorico()">🗓️ Agenda</button>
+      <button class="btn-secondary" onclick="goToStorico()">🗓️ Storico</button>
     </div>
+    <button class="btn-secondary" onclick="goToCalendario()">📅 Calendario Reparto</button>
   </div>
 
   <!-- PRESENZE -->
@@ -145,8 +148,20 @@
     <h1>Elenco presenze</h1>
     <div class="card">
       <textarea id="output-text" readonly></textarea>
-      <button class="btn-primary" onclick="copyOutput()">Copia testo</button>
+      <button class="btn-primary" onclick="copyOutput()">📋 Copia testo</button>
       <button class="btn-secondary" onclick="goToRoster()">Torna alla lista</button>
+    </div>
+  </div>
+
+  <!-- CALENDARIO REPARTO -->
+  <div id="view-calendario" class="hidden">
+    <div class="nav">
+      <div class="who">Calendario del Reparto</div>
+      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+    </div>
+    <div class="card">
+      <iframe class="calendar-frame" src="https://calendar.google.com/calendar/embed?src=c_fbcc9a69b80a0689fa96a965e89815a649b8aee0604425cc831d6971a5142764%40group.calendar.google.com&amp;ctz=Europe%2FRome&amp;mode=AGENDA&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0" frameborder="0" scrolling="no"></iframe>
+      <p class="cal-note">Calendario pubblico del Gruppo Scout Val d'Enza 1, filtrato sulla sola branca Reparto (Branca E/G). Se non corrisponde, fammelo sapere e lo cambio.</p>
     </div>
   </div>
 
@@ -156,7 +171,7 @@
       <div class="who">Squadriglia <b id="sq-nome-4"></b></div>
       <button class="btn-text" onclick="goToRoster()">← Lista</button>
     </div>
-    <h1>lista riunioni</h1>
+    <h1>Storico riunioni</h1>
     <div class="card"><div id="storico-list"></div></div>
   </div>
 
@@ -172,12 +187,12 @@ let accounts = [];
 const STATI = {
   assente: 'Assente',
   presente: 'Presente',
-  uscito_prima: 'Esce prima',
-  arrivato_dopo: 'Arriva dopo'
+  uscito_prima: 'Uscito prima',
+  arrivato_dopo: 'Arrivato dopo'
 };
 
 function showView(id) {
-  ['view-welcome','view-login','view-roster','view-presenze','view-output','view-storico'].forEach(v => {
+  ['view-welcome','view-login','view-roster','view-presenze','view-output','view-storico','view-calendario'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -372,6 +387,10 @@ function generaOutput() {
   showView('view-output');
 }
 
+function goToCalendario() {
+  showView('view-calendario');
+}
+
 function goToStorico() {
   loadStorico();
   document.getElementById('sq-nome-4').textContent = session.squadriglia;
@@ -424,4 +443,3 @@ function escapeHtml(s) {
 </script>
 </body>
 </html>
-
