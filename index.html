@@ -12,14 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f3f1ea;
-    --card: #ffffff;
-    --text: #22312a;
-    --muted: #68766f;
-    --accent: #2f6f4f;
-    --accent-dark: #204d37;
-    --border: #e1ded2;
-    --danger: #b3432f;
+    --bg: #f3f1ea; --card: #ffffff; --text: #22312a; --muted: #68766f;
+    --accent: #2f6f4f; --accent-dark: #204d37; --border: #e1ded2; --danger: #b3432f;
+    --warn: #b8872b;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -27,73 +22,76 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #161b18; --card: #1f2621; --text: #eef1ee; --muted: #9aa69f;
-      --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f;
+      --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f; --warn: #d9ab52;
     }
   }
   :root[data-theme="dark"] {
     --bg: #161b18; --card: #1f2621; --text: #eef1ee; --muted: #9aa69f;
-    --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f;
+    --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f; --warn: #d9ab52;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
-  body {
-    margin: 0; background: var(--bg); color: var(--text);
-    font-family: 'Fredoka', system-ui, -apple-system, sans-serif;
-    display: flex; justify-content: center;
-  }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Fredoka', system-ui, -apple-system, sans-serif; display: flex; justify-content: center; }
   #app { width: 100%; max-width: 440px; padding: 20px 16px 40px; }
   h1 { font-size: 1.3rem; margin: 4px 0 2px; }
   .sub { color: var(--muted); font-size: 0.9rem; margin: 0 0 18px; }
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 18px; margin-bottom: 14px;
-  }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
   label { display: block; font-size: 0.85rem; color: var(--muted); margin: 10px 0 5px; }
-  input[type=text] {
-    width: 100%; padding: 11px 12px; border-radius: 10px;
-    border: 1px solid var(--border); background: var(--bg); color: var(--text);
-    font-family: inherit; font-size: 1rem;
+  input[type=text], input[type=date], select {
+    width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-family: inherit; font-size: 1rem;
   }
-  input[type=text]:focus { outline: 2px solid var(--accent); }
-  button {
-    font-family: inherit; font-weight: 600; border: none; border-radius: 10px;
-    padding: 11px 16px; font-size: 0.95rem; cursor: pointer;
-  }
+  input:focus, select:focus { outline: 2px solid var(--accent); }
+  button { font-family: inherit; font-weight: 600; border: none; border-radius: 10px; padding: 11px 16px; font-size: 0.95rem; cursor: pointer; }
   .btn-primary { background: var(--accent); color: #fff; width: 100%; margin-top: 12px; }
   .btn-primary:active { background: var(--accent-dark); }
   .btn-secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
   .btn-text { background: none; color: var(--muted); padding: 4px 8px; font-size: 0.85rem; }
-  .btn-row { display: flex; gap: 8px; }
-  .btn-row button { flex: 1; }
-  .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; }
   .nav .who { font-size: 0.85rem; color: var(--muted); }
   .nav .who b { color: var(--text); }
+  .nav-actions { display: flex; gap: 6px; }
   .hidden { display: none !important; }
-  .member-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 2px; border-bottom: 1px solid var(--border);
-  }
+  .member-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px; border-bottom: 1px solid var(--border); }
   .member-row:last-child { border-bottom: none; }
   .member-row .x { color: var(--danger); cursor: pointer; font-size: 0.85rem; background: none; border: none; padding: 4px 8px; }
   .empty { color: var(--muted); font-size: 0.9rem; padding: 10px 2px; }
-  .check-row { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--border); }
-  .check-row:last-child { border-bottom: none; }
-  .check-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
-  .check-row label { margin: 0; color: var(--text); font-size: 1rem; }
-  textarea {
-    width: 100%; min-height: 120px; border-radius: 10px; border: 1px solid var(--border);
-    background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 10px; resize: vertical;
-  }
-  .toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%);
-    background: var(--accent-dark); color: #fff; padding: 9px 16px; border-radius: 20px; font-size: 0.85rem; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .presenza-row { padding: 12px 2px; border-bottom: 1px solid var(--border); }
+  .presenza-row:last-child { border-bottom: none; }
+  .presenza-nome { font-size: 1rem; margin-bottom: 6px; font-weight: 600; }
+  .presenza-controls { display: flex; gap: 8px; }
+  .presenza-controls select { flex: 1; }
+  .presenza-controls input { flex: 1; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row button { flex: 1; }
+  textarea { width: 100%; min-height: 140px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 10px; resize: vertical; }
+  .toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--accent-dark); color: #fff; padding: 9px 16px; border-radius: 20px; font-size: 0.85rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20; }
   .toast.show { opacity: 1; }
+  .account-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .account-btn { flex: 1; text-align: left; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 13px 14px; border-radius: 12px; }
+  .account-btn b { display: block; font-size: 1rem; }
+  .account-btn span { color: var(--muted); font-size: 0.82rem; }
+  .forget-btn { color: var(--muted); background: none; border: none; font-size: 1.1rem; padding: 8px; }
+  .storico-item { padding: 12px 4px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .storico-item:last-child { border-bottom: none; }
+  .storico-item .d { font-weight: 600; text-transform: capitalize; }
+  .storico-item .s { color: var(--muted); font-size: 0.82rem; }
+  .storico-item .del { color: var(--danger); background: none; border: none; font-size: 0.8rem; padding: 6px; }
 </style>
 </head>
 <body>
 <div id="app">
 
+  <!-- BENTORNATO -->
+  <div id="view-welcome" class="hidden">
+    <h1>🏕️ Bentornato!</h1>
+    <p class="sub">Vuoi accedere con uno di questi account?</p>
+    <div class="card" id="accounts-list"></div>
+    <button class="btn-secondary" onclick="showView('view-login')">Accedi con un altro account</button>
+  </div>
+
   <!-- LOGIN -->
-  <div id="view-login">
+  <div id="view-login" class="hidden">
     <h1>🏕️ Presenze Squadriglia</h1>
     <p class="sub">Accedi con il tuo nome e il nome della tua squadriglia.</p>
     <div class="card">
@@ -116,32 +114,35 @@
       <input type="text" id="in-membro" placeholder="Nome persona" onkeydown="if(event.key==='Enter')addMember()">
       <button class="btn-primary" onclick="addMember()">+ Aggiungi</button>
     </div>
-    <div class="card">
-      <div id="roster-list"></div>
+    <div class="card"><div id="roster-list"></div></div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goToPresenze()">📋 Presenze</button>
+      <button class="btn-secondary" onclick="goToStorico()">🗓️ Storico</button>
     </div>
-    <button class="btn-primary" onclick="goToPresenze()">📋 Stampa Presenze</button>
   </div>
 
-  <!-- PRESENZE (checklist) -->
+  <!-- PRESENZE -->
   <div id="view-presenze" class="hidden">
     <div class="nav">
       <div class="who">Squadriglia <b id="sq-nome-2"></b></div>
       <button class="btn-text" onclick="goToRoster()">← Lista</button>
     </div>
-    <h1>Segna chi è presente</h1>
+    <h1>Segna le presenze</h1>
     <div class="card">
-      <div id="presenze-list"></div>
+      <label for="in-data">Data riunione</label>
+      <input type="date" id="in-data">
     </div>
-    <button class="btn-primary" onclick="generaOutput()">Genera elenco presenti</button>
+    <div class="card"><div id="presenze-list"></div></div>
+    <button class="btn-primary" onclick="generaOutput()">Genera elenco e salva</button>
   </div>
 
   <!-- OUTPUT -->
   <div id="view-output" class="hidden">
     <div class="nav">
       <div class="who">Squadriglia <b id="sq-nome-3"></b></div>
-      <button class="btn-text" onclick="goToPresenze()">← Modifica</button>
+      <button class="btn-text" id="output-back-btn">← Indietro</button>
     </div>
-    <h1>Elenco presenti</h1>
+    <h1>Elenco presenze</h1>
     <div class="card">
       <textarea id="output-text" readonly></textarea>
       <button class="btn-primary" onclick="copyOutput()">📋 Copia testo</button>
@@ -149,16 +150,34 @@
     </div>
   </div>
 
+  <!-- STORICO -->
+  <div id="view-storico" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-4"></b></div>
+      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+    </div>
+    <h1>Storico riunioni</h1>
+    <div class="card"><div id="storico-list"></div></div>
+  </div>
+
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-let session = null; // { nome, squadriglia }
-let roster = [];    // array di stringhe
-let presentiState = {}; // nome -> bool, per la sessione corrente di presenze
+let session = null;
+let roster = [];
+let storico = [];
+let accounts = [];
+
+const STATI = {
+  assente: 'Assente',
+  presente: 'Presente',
+  uscito_prima: 'Uscito prima',
+  arrivato_dopo: 'Arrivato dopo'
+};
 
 function showView(id) {
-  ['view-login','view-roster','view-presenze','view-output'].forEach(v => {
+  ['view-welcome','view-login','view-roster','view-presenze','view-output','view-storico'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -170,21 +189,65 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 1600);
 }
 
-function rosterKey(squadriglia) {
-  return 'presenze_roster_' + squadriglia.trim().toLowerCase();
+function slug(s) { return s.trim().toLowerCase(); }
+function rosterKey(sq) { return 'presenze_roster_' + slug(sq); }
+function storicoKey(sq) { return 'presenze_storico_' + slug(sq); }
+
+function loadAccounts() {
+  try { accounts = JSON.parse(localStorage.getItem('presenze_accounts') || '[]'); }
+  catch (e) { accounts = []; }
+}
+function saveAccounts() {
+  try { localStorage.setItem('presenze_accounts', JSON.stringify(accounts)); } catch (e) {}
+}
+function upsertAccount(nome, squadriglia) {
+  accounts = accounts.filter(a => !(slug(a.nome) === slug(nome) && slug(a.squadriglia) === slug(squadriglia)));
+  accounts.unshift({ nome, squadriglia });
+  accounts = accounts.slice(0, 5);
+  saveAccounts();
+}
+function forgetAccount(i, ev) {
+  ev.stopPropagation();
+  accounts.splice(i, 1);
+  saveAccounts();
+  renderWelcome();
 }
 
 function loadRoster() {
-  try {
-    const raw = localStorage.getItem(rosterKey(session.squadriglia));
-    roster = raw ? JSON.parse(raw) : [];
-  } catch (e) { roster = []; }
+  try { roster = JSON.parse(localStorage.getItem(rosterKey(session.squadriglia)) || '[]'); }
+  catch (e) { roster = []; }
+}
+function saveRoster() {
+  try { localStorage.setItem(rosterKey(session.squadriglia), JSON.stringify(roster)); } catch (e) {}
 }
 
-function saveRoster() {
-  try {
-    localStorage.setItem(rosterKey(session.squadriglia), JSON.stringify(roster));
-  } catch (e) { console.error('Errore salvataggio:', e); }
+function loadStorico() {
+  try { storico = JSON.parse(localStorage.getItem(storicoKey(session.squadriglia)) || '[]'); }
+  catch (e) { storico = []; }
+}
+function saveStorico() {
+  try { localStorage.setItem(storicoKey(session.squadriglia), JSON.stringify(storico)); } catch (e) {}
+}
+
+function renderWelcome() {
+  const list = document.getElementById('accounts-list');
+  list.innerHTML = '';
+  if (accounts.length === 0) { showView('view-login'); return; }
+  accounts.forEach((a, i) => {
+    const row = document.createElement('div');
+    row.className = 'account-row';
+    row.innerHTML = `<button class="account-btn" onclick="selectAccount(${i})"><b>${escapeHtml(a.nome)}</b><span>Squadriglia ${escapeHtml(a.squadriglia)}</span></button><button class="forget-btn" onclick="forgetAccount(${i}, event)">✕</button>`;
+    list.appendChild(row);
+  });
+  showView('view-welcome');
+}
+
+function selectAccount(i) {
+  const a = accounts[i];
+  session = { nome: a.nome, squadriglia: a.squadriglia };
+  upsertAccount(a.nome, a.squadriglia);
+  loadRoster();
+  goToRoster();
 }
 
 function login() {
@@ -192,17 +255,16 @@ function login() {
   const squadriglia = document.getElementById('in-squadriglia').value.trim();
   if (!nome || !squadriglia) { toast('Inserisci nome e squadriglia'); return; }
   session = { nome, squadriglia };
-  try { localStorage.setItem('presenze_session', JSON.stringify(session)); } catch (e) {}
+  upsertAccount(nome, squadriglia);
   loadRoster();
   goToRoster();
 }
 
 function logout() {
   session = null;
-  try { localStorage.removeItem('presenze_session'); } catch (e) {}
   document.getElementById('in-nome').value = '';
   document.getElementById('in-squadriglia').value = '';
-  showView('view-login');
+  renderWelcome();
 }
 
 function goToRoster() {
@@ -215,10 +277,7 @@ function goToRoster() {
 function renderRoster() {
   const list = document.getElementById('roster-list');
   list.innerHTML = '';
-  if (roster.length === 0) {
-    list.innerHTML = '<div class="empty">Nessuna persona ancora. Aggiungine una qui sopra.</div>';
-    return;
-  }
+  if (roster.length === 0) { list.innerHTML = '<div class="empty">Nessuna persona ancora. Aggiungine una qui sopra.</div>'; return; }
   roster.forEach((nome, i) => {
     const row = document.createElement('div');
     row.className = 'member-row';
@@ -236,73 +295,133 @@ function addMember() {
   input.value = '';
   renderRoster();
 }
-
-function removeMember(i) {
-  roster.splice(i, 1);
-  saveRoster();
-  renderRoster();
-}
+function removeMember(i) { roster.splice(i, 1); saveRoster(); renderRoster(); }
 
 function goToPresenze() {
   if (roster.length === 0) { toast('Aggiungi prima qualche persona'); return; }
   document.getElementById('sq-nome-2').textContent = session.squadriglia;
+  const dataInput = document.getElementById('in-data');
+  if (!dataInput.value) dataInput.value = new Date().toISOString().slice(0, 10);
+
   const list = document.getElementById('presenze-list');
   list.innerHTML = '';
   roster.forEach((nome, i) => {
-    const id = 'chk-' + i;
-    const checked = presentiState[nome] ? 'checked' : '';
     const row = document.createElement('div');
-    row.className = 'check-row';
-    row.innerHTML = `<input type="checkbox" id="${id}" data-nome="${escapeHtml(nome)}" ${checked}><label for="${id}">${escapeHtml(nome)}</label>`;
+    row.className = 'presenza-row';
+    row.innerHTML = `
+      <div class="presenza-nome">${escapeHtml(nome)}</div>
+      <div class="presenza-controls">
+        <select id="stato-${i}" data-nome="${escapeHtml(nome)}" onchange="toggleOrario(${i})">
+          <option value="assente">Assente</option>
+          <option value="presente">Presente</option>
+          <option value="uscito_prima">Uscito prima</option>
+          <option value="arrivato_dopo">Arrivato dopo</option>
+        </select>
+        <input type="text" id="orario-${i}" class="hidden" placeholder="orario es. 21:30">
+      </div>`;
     list.appendChild(row);
   });
   showView('view-presenze');
 }
 
-function generaOutput() {
-  const checks = document.querySelectorAll('#presenze-list input[type=checkbox]');
-  presentiState = {};
-  const presenti = [];
-  checks.forEach(c => {
-    presentiState[c.dataset.nome] = c.checked;
-    if (c.checked) presenti.push(c.dataset.nome);
+function toggleOrario(i) {
+  const stato = document.getElementById('stato-' + i).value;
+  const orarioInput = document.getElementById('orario-' + i);
+  orarioInput.classList.toggle('hidden', stato !== 'uscito_prima' && stato !== 'arrivato_dopo');
+}
+
+function formatDataIt(dataStr) {
+  try {
+    const d = new Date(dataStr + 'T12:00:00');
+    return d.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  } catch (e) { return dataStr; }
+}
+
+function buildOutputText(data, voci) {
+  const righe = voci.filter(v => v.stato !== 'assente').map(v => {
+    if (v.stato === 'presente') return `${v.nome} - presente`;
+    const lbl = v.stato === 'uscito_prima' ? 'uscito prima' : 'arrivato dopo';
+    const ora = v.orario ? ` (ore ${v.orario})` : '';
+    return `${v.nome} - ${lbl}${ora}`;
   });
+  const intestazione = `Presenze squadriglia ${session.squadriglia} - ${formatDataIt(data)}:`;
+  return righe.length ? intestazione + '\n' + righe.join('\n') : intestazione + '\nNessuna persona presente.';
+}
+
+function generaOutput() {
+  const data = document.getElementById('in-data').value || new Date().toISOString().slice(0, 10);
+  const selects = document.querySelectorAll('#presenze-list select');
+  const voci = [];
+  selects.forEach((sel, i) => {
+    const stato = sel.value;
+    const orarioEl = document.getElementById('orario-' + i);
+    voci.push({ nome: sel.dataset.nome, stato, orario: (orarioEl && !orarioEl.classList.contains('hidden')) ? orarioEl.value.trim() : '' });
+  });
+
+  loadStorico();
+  storico = storico.filter(r => r.data !== data);
+  storico.push({ data, voci });
+  storico.sort((a, b) => b.data.localeCompare(a.data));
+  saveStorico();
+
   document.getElementById('sq-nome-3').textContent = session.squadriglia;
-  const testo = presenti.length
-    ? `Presenze squadriglia ${session.squadriglia}:\n` + presenti.join('\n')
-    : `Nessuna persona segnata come presente (squadriglia ${session.squadriglia}).`;
-  document.getElementById('output-text').value = testo;
+  document.getElementById('output-text').value = buildOutputText(data, voci);
+  const backBtn = document.getElementById('output-back-btn');
+  backBtn.textContent = '← Modifica';
+  backBtn.onclick = goToPresenze;
   showView('view-output');
+}
+
+function goToStorico() {
+  loadStorico();
+  document.getElementById('sq-nome-4').textContent = session.squadriglia;
+  const list = document.getElementById('storico-list');
+  list.innerHTML = '';
+  if (storico.length === 0) { list.innerHTML = '<div class="empty">Nessuna riunione salvata ancora.</div>'; showView('view-storico'); return; }
+  storico.forEach((r, i) => {
+    const presenti = r.voci.filter(v => v.stato !== 'assente').length;
+    const row = document.createElement('div');
+    row.className = 'storico-item';
+    row.onclick = () => viewStoricoEntry(i);
+    row.innerHTML = `<div><div class="d">${formatDataIt(r.data)}</div><div class="s">${presenti} presenti/parziali su ${r.voci.length}</div></div><button class="del" onclick="deleteStoricoEntry(${i}, event)">elimina</button>`;
+    list.appendChild(row);
+  });
+  showView('view-storico');
+}
+
+function viewStoricoEntry(i) {
+  const r = storico[i];
+  document.getElementById('sq-nome-3').textContent = session.squadriglia;
+  document.getElementById('output-text').value = buildOutputText(r.data, r.voci);
+  const backBtn = document.getElementById('output-back-btn');
+  backBtn.textContent = '← Storico';
+  backBtn.onclick = goToStorico;
+  showView('view-output');
+}
+
+function deleteStoricoEntry(i, ev) {
+  ev.stopPropagation();
+  storico.splice(i, 1);
+  saveStorico();
+  goToStorico();
 }
 
 async function copyOutput() {
   const ta = document.getElementById('output-text');
-  try {
-    await navigator.clipboard.writeText(ta.value);
-    toast('Copiato negli appunti!');
-  } catch (e) {
-    ta.select();
-    toast('Seleziona e copia manualmente');
-  }
+  try { await navigator.clipboard.writeText(ta.value); toast('Copiato negli appunti!'); }
+  catch (e) { ta.select(); toast('Seleziona e copia manualmente'); }
 }
 
 function escapeHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// Ripristina sessione se presente
 (function init() {
-  try {
-    const raw = localStorage.getItem('presenze_session');
-    if (raw) {
-      session = JSON.parse(raw);
-      loadRoster();
-      goToRoster();
-      return;
-    }
-  } catch (e) {}
-  showView('view-login');
+  loadAccounts();
+  if (accounts.length > 0) renderWelcome();
+  else showView('view-login');
 })();
 </script>
 </body>
 </html>
+
