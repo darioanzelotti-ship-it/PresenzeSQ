@@ -1,0 +1,68 @@
+:root {
+    --bg: #f3f1ea; --card: #ffffff; --text: #22312a; --muted: #68766f;
+    --accent: #2f6f4f; --accent-dark: #204d37; --border: #e1ded2; --danger: #b3432f;
+    --warn: #b8872b;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161b18; --card: #1f2621; --text: #eef1ee; --muted: #9aa69f;
+      --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f; --warn: #d9ab52;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161b18; --card: #1f2621; --text: #eef1ee; --muted: #9aa69f;
+    --accent: #5cb688; --accent-dark: #3f8d64; --border: #2d352f; --warn: #d9ab52;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Fredoka', system-ui, -apple-system, sans-serif; display: flex; justify-content: center; }
+  #app { width: 100%; max-width: 440px; padding: 20px 16px 40px; }
+  h1 { font-size: 1.3rem; margin: 4px 0 2px; }
+  .sub { color: var(--muted); font-size: 0.9rem; margin: 0 0 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
+  label { display: block; font-size: 0.85rem; color: var(--muted); margin: 10px 0 5px; }
+  input[type=text], input[type=date], select {
+    width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-family: inherit; font-size: 1rem;
+  }
+  input:focus, select:focus { outline: 2px solid var(--accent); }
+  button { font-family: inherit; font-weight: 600; border: none; border-radius: 10px; padding: 11px 16px; font-size: 0.95rem; cursor: pointer; }
+  .btn-primary { background: var(--accent); color: #fff; width: 100%; margin-top: 12px; }
+  .btn-primary:active { background: var(--accent-dark); }
+  .btn-secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); width: 100%; margin-top: 8px; }
+  .btn-text { background: none; color: var(--muted); padding: 4px 8px; font-size: 0.85rem; }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 8px; }
+  .nav .who { font-size: 0.85rem; color: var(--muted); }
+  .nav .who b { color: var(--text); }
+  .nav-actions { display: flex; gap: 6px; }
+  .hidden { display: none !important; }
+  .member-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px; border-bottom: 1px solid var(--border); }
+  .member-row:last-child { border-bottom: none; }
+  .member-row .x { color: var(--danger); cursor: pointer; font-size: 0.85rem; background: none; border: none; padding: 4px 8px; }
+  .empty { color: var(--muted); font-size: 0.9rem; padding: 10px 2px; }
+  .presenza-row { padding: 12px 2px; border-bottom: 1px solid var(--border); }
+  .presenza-row:last-child { border-bottom: none; }
+  .presenza-nome { font-size: 1rem; margin-bottom: 6px; font-weight: 600; }
+  .presenza-controls { display: flex; gap: 8px; }
+  .presenza-controls select { flex: 1; }
+  .presenza-controls input { flex: 1; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row button { flex: 1; }
+  textarea { width: 100%; min-height: 140px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 10px; resize: vertical; }
+  .toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--accent-dark); color: #fff; padding: 9px 16px; border-radius: 20px; font-size: 0.85rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20; }
+  .toast.show { opacity: 1; }
+  .account-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .account-btn { flex: 1; text-align: left; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 13px 14px; border-radius: 12px; }
+  .account-btn b { display: block; font-size: 1rem; }
+  .account-btn span { color: var(--muted); font-size: 0.82rem; }
+  .forget-btn { color: var(--muted); background: none; border: none; font-size: 1.1rem; padding: 8px; }
+  .storico-item { padding: 12px 4px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .storico-item:last-child { border-bottom: none; }
+  .storico-item .d { font-weight: 600; text-transform: capitalize; }
+  .storico-item .s { color: var(--muted); font-size: 0.82rem; }
+  .storico-item .del { color: var(--danger); background: none; border: none; font-size: 0.8rem; padding: 6px; }
+  .calendar-frame { width: 100%; height: 65vh; min-height: 420px; border: none; border-radius: 14px; background: var(--card); }
+  .cal-note { color: var(--muted); font-size: 0.8rem; margin-top: 8px; }
