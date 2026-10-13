@@ -26,13 +26,32 @@
   <!-- LOGIN -->
   <div id="view-login" class="hidden">
     <h1>🏕️ Presenze Squadriglia</h1>
-    <p class="sub">Accedi con il tuo nome e il nome della tua squadriglia.</p>
+    <p class="sub">Accedi con il tuo nome, la squadriglia e il suo codice.</p>
     <div class="card">
       <label for="in-nome">Il tuo nome</label>
-      <input type="text" id="in-nome" placeholder="es. Massimigliano">
+      <input type="text" id="in-nome" placeholder="es. Marco">
       <label for="in-squadriglia">Nome squadriglia</label>
-      <input type="text" id="in-squadriglia" placeholder="es. Piranha">
-      <button class="btn-primary" onclick="login()">Entra</button>
+      <input type="text" id="in-squadriglia" placeholder="es. Aquile">
+      <label for="in-ruolo">Ruolo</label>
+      <select id="in-ruolo" onchange="aggiornaHintCodice()">
+        <option value="squadrigliero">Squadrigliero</option>
+        <option value="capo">Capo</option>
+      </select>
+      <label for="in-codice">Codice squadriglia</label>
+      <input type="text" id="in-codice" placeholder="es. AQX47K">
+      <p class="sub" id="hint-codice">Chiedi il codice al tuo capo squadriglia.</p>
+      <button class="btn-primary" id="btn-login" onclick="login()">Entra</button>
+    </div>
+  </div>
+
+  <!-- CODICE NUOVA SQUADRIGLIA -->
+  <div id="view-nuovo-codice" class="hidden">
+    <h1>🎉 Squadriglia creata!</h1>
+    <p class="sub">Condividi questo codice con i tuoi squadriglieri, serve per accedere.</p>
+    <div class="card">
+      <div class="codice-box" id="codice-generato"></div>
+      <button class="btn-primary" onclick="copiaCodice()">📋 Copia codice</button>
+      <button class="btn-secondary" onclick="continuaDopoCreazione()">Continua</button>
     </div>
   </div>
 
@@ -50,9 +69,13 @@
     <div class="card"><div id="roster-list"></div></div>
     <div class="btn-row">
       <button class="btn-primary" onclick="goToPresenze()">📋 Presenze</button>
-      <button class="btn-secondary" onclick="goToStorico()">🗓️ Cronologia</button>
+      <button class="btn-secondary" onclick="goToStorico()">🗓️ Storico</button>
     </div>
-    <button class="btn-secondary" onclick="goToCalendario()">📅 Calendario Reparto</button>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goToCalendario()">📅 Calendario</button>
+      <button class="btn-secondary" onclick="goToMessaggi()">💬 Messaggi</button>
+    </div>
+    <button class="btn-secondary hidden" id="btn-promemoria" onclick="goToPromemoria()">📣 Promemoria prossima riunione</button>
   </div>
 
   <!-- PRESENZE -->
@@ -79,9 +102,41 @@
     <h1>Elenco presenze</h1>
     <div class="card">
       <textarea id="output-text" readonly></textarea>
-      <button class="btn-primary" onclick="copyOutput()">📋 Copia testo</button>
+      <button class="btn-primary" onclick="sendWhatsApp(document.getElementById('output-text').value)">📲 Invia su WhatsApp</button>
+      <button class="btn-secondary" onclick="copyOutput()">📋 Copia testo</button>
       <button class="btn-secondary" onclick="goToRoster()">Torna alla lista</button>
     </div>
+  </div>
+
+  <!-- PROMEMORIA (solo capi) -->
+  <div id="view-promemoria" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-5"></b></div>
+      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+    </div>
+    <h1>Promemoria prossima riunione</h1>
+    <p class="sub">Guarda la data sul Calendario Reparto e compilala qui sotto.</p>
+    <div class="card">
+      <label for="pr-data">Data</label>
+      <input type="date" id="pr-data">
+      <label for="pr-ora">Ora</label>
+      <input type="text" id="pr-ora" placeholder="es. 16:00 - 18:00">
+      <label for="pr-luogo">Luogo</label>
+      <input type="text" id="pr-luogo" placeholder="es. Sede scout">
+      <label for="pr-note">Note (cosa portare, cosa fare, ecc.)</label>
+      <textarea id="pr-note" placeholder="es. Portare divisa e zaino da escursione"></textarea>
+    </div>
+    <button class="btn-primary" onclick="generaPromemoria()">Genera messaggio</button>
+  </div>
+
+  <!-- STORICO -->
+  <div id="view-storico" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-4"></b></div>
+      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+    </div>
+    <h1>Storico riunioni</h1>
+    <div class="card"><div id="storico-list"></div></div>
   </div>
 
   <!-- CALENDARIO REPARTO -->
@@ -96,19 +151,26 @@
     </div>
   </div>
 
-  <!-- STORICO -->
-  <div id="view-storico" class="hidden">
+  <!-- MESSAGGI -->
+  <div id="view-messaggi" class="hidden">
     <div class="nav">
-      <div class="who">Squadriglia <b id="sq-nome-4"></b></div>
+      <div class="who">Squadriglia <b id="sq-nome-6"></b></div>
       <button class="btn-text" onclick="goToRoster()">← Lista</button>
     </div>
-    <h1>Storico riunioni</h1>
-    <div class="card"><div id="storico-list"></div></div>
+    <h1>Messaggi dal capo</h1>
+    <div class="card hidden" id="msg-invio-card">
+      <label for="msg-testo">Scrivi un messaggio o un appunto</label>
+      <textarea id="msg-testo" placeholder="es. Sabato portate il sacco a pelo"></textarea>
+      <button class="btn-primary" onclick="inviaMessaggio()">Invia</button>
+    </div>
+    <div class="card"><div id="messaggi-list"></div></div>
   </div>
 
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
