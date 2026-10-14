@@ -19,7 +19,7 @@ let accounts = [];
 let codiceAppenaCreato = '';
 
 function showView(id) {
-  ['view-welcome','view-login','view-nuovo-codice','view-roster','view-presenze','view-output','view-storico','view-calendario','view-promemoria','view-messaggi'].forEach(v => {
+  ['view-welcome','view-login','view-nuovo-codice','view-squadrigliero','view-roster','view-presenze','view-output','view-storico','view-calendario','view-promemoria','view-messaggi'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -135,7 +135,13 @@ async function provaAccesso(nome, squadriglia, ruolo, codice) {
     roster = data.roster || [];
     storico = data.storico || [];
     messaggi = data.messaggi || [];
-    goToRoster();
+
+    if (ruolo === 'squadrigliero' && !roster.some(n => slug(n) === slug(nome))) {
+      roster.push(nome);
+      await saveField('roster', roster);
+    }
+
+    goHome();
   } catch (e) {
     console.error(e);
     toast('Errore di connessione, riprova.');
@@ -143,6 +149,17 @@ async function provaAccesso(nome, squadriglia, ruolo, codice) {
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = 'Entra'; }
   }
+}
+
+function goHome() {
+  if (session.ruolo === 'capo') goToRoster();
+  else goToSquadrigliero();
+}
+
+function goToSquadrigliero() {
+  document.getElementById('sq-nome-7').textContent = session.squadriglia;
+  document.getElementById('user-nome-7').textContent = session.nome;
+  showView('view-squadrigliero');
 }
 
 function copiaCodice() {
@@ -285,8 +302,13 @@ async function generaOutput() {
   showView('view-output');
 }
 
-function sendWhatsApp(testo) {
-  window.open('https://wa.me/?text=' + encodeURIComponent(testo), '_blank');
+async function inviaOutputComeMessaggio() {
+  const testo = document.getElementById('output-text').value;
+  if (!testo) return;
+  messaggi.unshift({ autore: session.nome, testo, data: Date.now() });
+  await saveField('messaggi', messaggi);
+  toast('Messaggio inviato alla squadriglia!');
+  goToMessaggi();
 }
 
 async function copyOutput() {
@@ -403,4 +425,3 @@ function escapeHtml(s) {
   if (accounts.length > 0) renderWelcome();
   else showView('view-login');
 })();
-
