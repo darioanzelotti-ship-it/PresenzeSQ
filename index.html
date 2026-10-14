@@ -55,6 +55,18 @@
     </div>
   </div>
 
+  <!-- HOME SQUADRIGLIERO (vista ridotta) -->
+  <div id="view-squadrigliero" class="hidden">
+    <div class="nav">
+      <div class="who">Squadriglia <b id="sq-nome-7"></b><br>Ciao, <b id="user-nome-7"></b></div>
+      <button class="btn-text" onclick="logout()">Esci</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goToCalendario()">📅 Calendario</button>
+      <button class="btn-secondary" onclick="goToMessaggi()">💬 Messaggi</button>
+    </div>
+  </div>
+
   <!-- ROSTER -->
   <div id="view-roster" class="hidden">
     <div class="nav">
@@ -102,7 +114,7 @@
     <h1>Elenco presenze</h1>
     <div class="card">
       <textarea id="output-text" readonly></textarea>
-      <button class="btn-primary" onclick="sendWhatsApp(document.getElementById('output-text').value)">📲 Invia su WhatsApp</button>
+      <button class="btn-primary" onclick="inviaOutputComeMessaggio()">✉️ Invia come messaggio</button>
       <button class="btn-secondary" onclick="copyOutput()">📋 Copia testo</button>
       <button class="btn-secondary" onclick="goToRoster()">Torna alla lista</button>
     </div>
@@ -143,7 +155,7 @@
   <div id="view-calendario" class="hidden">
     <div class="nav">
       <div class="who">Calendario del Reparto</div>
-      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+      <button class="btn-text" onclick="goHome()">← Indietro</button>
     </div>
     <div class="card">
       <iframe class="calendar-frame" src="https://calendar.google.com/calendar/embed?src=c_54e2bd11628630ba6020178da3e4a09cfeb431befece937f40e1e9e177bbce13%40group.calendar.google.com&amp;ctz=Europe%2FRome&amp;mode=AGENDA&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0" frameborder="0" scrolling="no"></iframe>
@@ -155,7 +167,7 @@
   <div id="view-messaggi" class="hidden">
     <div class="nav">
       <div class="who">Squadriglia <b id="sq-nome-6"></b></div>
-      <button class="btn-text" onclick="goToRoster()">← Lista</button>
+      <button class="btn-text" onclick="goHome()">← Indietro</button>
     </div>
     <h1>Messaggi dal capo</h1>
     <div class="card hidden" id="msg-invio-card">
