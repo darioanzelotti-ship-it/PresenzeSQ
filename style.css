@@ -79,3 +79,4 @@
 .msg-item .data { color: var(--muted); font-size: 0.75rem; float: right; }
 .msg-item .testo { margin-top: 4px; white-space: pre-wrap; }
 button:disabled { opacity: 0.6; }
+
