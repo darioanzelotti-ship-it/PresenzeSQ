@@ -19,7 +19,7 @@ let accounts = [];
 let codiceAppenaCreato = '';
 
 function showView(id) {
-  ['view-welcome','view-login','view-nuovo-codice','view-squadrigliero','view-roster','view-presenze','view-output','view-storico','view-calendario','view-promemoria','view-messaggi'].forEach(v => {
+  ['view-welcome','view-login','view-nuovo-codice','view-impostazioni','view-squadrigliero','view-roster','view-presenze','view-output','view-storico','view-calendario','view-promemoria','view-messaggi'].forEach(v => {
     document.getElementById(v).classList.toggle('hidden', v !== id);
   });
 }
@@ -160,6 +160,51 @@ function goToSquadrigliero() {
   document.getElementById('sq-nome-7').textContent = session.squadriglia;
   document.getElementById('user-nome-7').textContent = session.nome;
   showView('view-squadrigliero');
+}
+
+function goToImpostazioni() {
+  document.getElementById('imp-nome').value = session.nome;
+  document.getElementById('imp-ruolo').value = session.ruolo;
+  showView('view-impostazioni');
+}
+
+async function salvaImpostazioni() {
+  const nuovoNome = document.getElementById('imp-nome').value.trim();
+  const nuovoRuolo = document.getElementById('imp-ruolo').value;
+  if (!nuovoNome) { toast('Inserisci un nome'); return; }
+  const vecchioNome = session.nome;
+
+  const idx = roster.findIndex(n => slug(n) === slug(vecchioNome));
+  if (idx !== -1) {
+    if (slug(nuovoNome) !== slug(vecchioNome)) {
+      roster[idx] = nuovoNome;
+      await saveField('roster', roster);
+    }
+  } else if (nuovoRuolo === 'squadrigliero' && !roster.some(n => slug(n) === slug(nuovoNome))) {
+    roster.push(nuovoNome);
+    await saveField('roster', roster);
+  }
+
+  accounts = accounts.filter(a => !(slug(a.nome) === slug(vecchioNome) && slug(a.squadriglia) === slug(session.squadriglia)));
+  session = { nome: nuovoNome, squadriglia: session.squadriglia, ruolo: nuovoRuolo, codice: session.codice };
+  upsertAccount(session);
+  toast('Impostazioni salvate!');
+  goHome();
+}
+
+async function eliminaAccount() {
+  const ok = confirm('Vuoi eliminare definitivamente il tuo account da questa squadriglia? Il tuo nome sarà rimosso dalla lista e da questo dispositivo. Non si può annullare.');
+  if (!ok) return;
+  const idx = roster.findIndex(n => slug(n) === slug(session.nome));
+  if (idx !== -1) {
+    roster.splice(idx, 1);
+    await saveField('roster', roster);
+  }
+  accounts = accounts.filter(a => !(slug(a.nome) === slug(session.nome) && slug(a.squadriglia) === slug(session.squadriglia)));
+  saveAccounts();
+  session = null;
+  toast('Account eliminato.');
+  renderWelcome();
 }
 
 function copiaCodice() {
@@ -368,7 +413,7 @@ function viewStoricoEntry(i) {
   document.getElementById('sq-nome-3').textContent = session.squadriglia;
   document.getElementById('output-text').value = buildOutputText(r.data, r.voci);
   const backBtn = document.getElementById('output-back-btn');
-  backBtn.textContent = '← Storico';
+  backBtn.textContent = '← Cronologia';
   backBtn.onclick = goToStorico;
   showView('view-output');
 }
