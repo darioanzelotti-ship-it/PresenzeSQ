@@ -31,13 +31,13 @@
     <p class="sub">Accedi con il tuo nome, la squadriglia e il suo codice.</p>
     <div class="card">
       <label for="in-nome">Il tuo nome</label>
-      <input type="text" id="in-nome" placeholder="es. Massimigliano">
+      <input type="text" id="in-nome" placeholder="es. Marco">
       <label for="in-squadriglia">Nome squadriglia</label>
-      <input type="text" id="in-squadriglia" placeholder="es. Albatros">
+      <input type="text" id="in-squadriglia" placeholder="es. Aquile">
       <label for="in-ruolo">Ruolo</label>
       <select id="in-ruolo" onchange="aggiornaHintCodice()">
         <option value="squadrigliero">Squadrigliero</option>
-        <option value="capo">Capo/Vice</option>
+        <option value="capo">Capo</option>
       </select>
       <label for="in-codice">Codice squadriglia</label>
       <input type="text" id="in-codice" placeholder="es. AQX47K">
@@ -190,7 +190,7 @@
     </div>
     <div class="card">
       <iframe class="calendar-frame" src="https://calendar.google.com/calendar/embed?src=c_54e2bd11628630ba6020178da3e4a09cfeb431befece937f40e1e9e177bbce13%40group.calendar.google.com&amp;ctz=Europe%2FRome&amp;mode=AGENDA&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0" frameborder="0" scrolling="no"></iframe>
-      <p class="cal-note">Calendario pubblico del Gruppo Scout Val d'Enza 1 (Branca E/G).</p>
+      <p class="cal-note">Calendario pubblico del Gruppo Scout Val d'Enza 1, filtrato sulla sola branca Reparto (Branca E/G).</p>
     </div>
   </div>
 
@@ -200,7 +200,7 @@
       <div class="who">Squadriglia <b id="sq-nome-6"></b></div>
       <button class="btn-text" onclick="goHome()">← Indietro</button>
     </div>
-    <h1>Messaggi dal capo/vice</h1>
+    <h1>Messaggi dal capo</h1>
     <div class="card hidden" id="msg-invio-card">
       <label for="msg-testo">Scrivi un messaggio o un appunto</label>
       <textarea id="msg-testo" placeholder="es. Sabato portate il sacco a pelo"></textarea>
@@ -217,3 +217,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
